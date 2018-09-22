@@ -93,7 +93,7 @@ public class JaroWinklerMatcher {
                 executor.execute(worker);
             }
             executor.shutdown();
-            while (!executor.isTerminated()) {
+            while (!executor.isTerminated() && !Thread.interrupted()) {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -104,6 +104,7 @@ public class JaroWinklerMatcher {
             similarityBook = new HashMap<String, Map<String, Double>>(listA.size(), 1.0f);
             
             for (Pair<List<String>, List<String>> tempPair : tempPairs) {
+                if (Thread.interrupted()) break;
                 new JaroWinklerTrieFilter(tempPair, similarityBook, metric.clone(), threshold).run();
             }
         }
