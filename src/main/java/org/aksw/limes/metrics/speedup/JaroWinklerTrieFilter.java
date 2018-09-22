@@ -13,7 +13,6 @@ public class JaroWinklerTrieFilter implements Runnable {
     Pair<List<String>, List<String>> tempPair;
     List<Pair<List<String>, List<String>>> filteredPairs;
     Map<String, Map<String, Double>> result;
-    HashMap<String, HashMap<String, Double>> tempResult;
     JaroWinklerMetric metric;
 
     public JaroWinklerTrieFilter (Pair<List<String>, List<String>> lists, Map<String, Map<String, Double>> result, JaroWinklerMetric metric, double threshold) {
@@ -21,7 +20,6 @@ public class JaroWinklerTrieFilter implements Runnable {
         this.tempPair = lists;
         this.filteredPairs = new LinkedList<Pair<List<String>, List<String>>>();
         this.result = result;
-        this.tempResult = new HashMap<String, HashMap<String, Double>>();
         this.metric = metric;
     }
 
@@ -142,7 +140,7 @@ public class JaroWinklerTrieFilter implements Runnable {
                     first = false;
                 }
                 if (similarityTable.size() > 0) {
-                    tempResult.put(a, (HashMap<String, Double>) (similarityTable.clone()));
+                    result.put(a, (HashMap<String, Double>) (similarityTable.clone()));
                 }
             }
         }
