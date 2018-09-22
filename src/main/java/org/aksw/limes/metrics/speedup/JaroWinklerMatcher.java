@@ -86,11 +86,10 @@ public class JaroWinklerMatcher {
             tempPairs.add(m);
         }
 
-        System.out.println("Partitioned into " + String.valueOf(tempPairs.size()) + " sets.");
-        System.out.println("Initializing Threadpool for " + String.valueOf(Runtime.getRuntime().availableProcessors()) + " threads.");
+        int threads = Math.min(this.cores, Runtime.getRuntime().availableProcessors());
 
         //create thread pool, one thread per partition
-        ExecutorService executor = Executors.newFixedThreadPool(Math.min(this.cores, Runtime.getRuntime().availableProcessors()));
+        ExecutorService executor = Executors.newFixedThreadPool(threads);
         for (Pair<List<String>, List<String>> tempPair : tempPairs) {
             Runnable worker = new JaroWinklerTrieFilter(tempPair, similarityBook, metric.clone(), threshold);
             executor.execute(worker);
