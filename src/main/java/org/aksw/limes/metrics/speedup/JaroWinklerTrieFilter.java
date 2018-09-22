@@ -121,24 +121,23 @@ public class JaroWinklerTrieFilter implements Runnable {
 
         boolean first;
         double currentSim;
-        HashMap<String, Double> similarityTable = new HashMap<String, Double>();
 
 
         for (Pair<List<String>, List<String>> filteredPair : filteredPairs) {
             for (String a : swapped ? filteredPair.getRight() : filteredPair.getLeft()) {
                 first = true;
-                similarityTable.clear();
                 for (String b : !swapped ? filteredPair.getRight() : filteredPair.getLeft()) {
                     if (first)
                         currentSim = metric.proximity(a, b);
                     else
                         currentSim = metric.proximity(b);
-                    if (currentSim >= threshold)
-                        similarityTable.put(b, currentSim);
+                    if (currentSim >= threshold) {
+                        if (!result.containsKey(a)) {
+                            result.put(a, new HashMap<String, Double>());
+                        }
+                        result.get(a).put(b, currentSim);
+                    }
                     first = false;
-                }
-                if (similarityTable.size() > 0) {
-                    result.put(a, (HashMap<String, Double>) (similarityTable.clone()));
                 }
             }
         }
