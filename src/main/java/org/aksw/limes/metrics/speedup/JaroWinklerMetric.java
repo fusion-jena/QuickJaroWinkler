@@ -121,8 +121,8 @@ public class JaroWinklerMetric extends AbstractFilteredMetric {
         if (range < 0)
             range = 0;
         int k;
-        int t;
-        int m = t = k = 0;
+        double t = 0;
+        int m = k = 0;
         int j;
         for (i = 0; i < yin.length; i++) {
             int low = (i >= range) ? i - range : 0;
