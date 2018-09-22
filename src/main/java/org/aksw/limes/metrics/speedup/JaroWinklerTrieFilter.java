@@ -99,11 +99,11 @@ public class JaroWinklerTrieFilter implements Runnable {
                         if (currentOrder == 0) {
                             current.getLeft().pop();
                             current.setRight(current.getRight()+1);
-                            if (current.getRight() >= matchesNeeded(maxBlue, current.getMiddle().getLevel())
-                                    && current.getMiddle().data != null && current.getMiddle().data.size() > 0
-                                    && characterFrequencyFilter(current.getMiddle().getLevel(), blueKey.length(), current.getRight()) >= threshold) {
-                                redMatches.addAll(current.getMiddle().data);
-                            }
+                        }
+                        if (current.getRight() >= matchesNeeded(maxBlue, current.getMiddle().getLevel())
+                                && current.getMiddle().data != null && current.getMiddle().data.size() > 0
+                                && characterFrequencyFilter(current.getMiddle().getLevel(), blueKey.length(), current.getRight()) >= threshold) {
+                            redMatches.addAll(current.getMiddle().data);
                         }
                         for (Character key : current.getMiddle().children.keySet()) {
                             redStack.push(new MutableTriple<Stack<Character>, JaroWinklerTrieNode, Integer>(
