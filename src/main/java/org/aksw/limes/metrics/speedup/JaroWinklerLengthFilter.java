@@ -69,11 +69,4 @@ public class JaroWinklerLengthFilter extends AbstractMetricFilter {
         }
         return sliceBoundaries;
     }
-
-    public static void main (String[] args) {
-        int a = JaroWinklerLengthFilter.minLenDeltaFor(5, 0.96);
-        JaroWinklerLengthFilter dummy = new JaroWinklerLengthFilter(0.8d);
-        double x = dummy.score("Intel".toCharArray(),"International Association of Travel Agents Network".toCharArray());
-        double y= x;
-    }
 }

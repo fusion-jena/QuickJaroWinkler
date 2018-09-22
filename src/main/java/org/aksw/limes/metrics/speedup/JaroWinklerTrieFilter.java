@@ -34,6 +34,7 @@ public class JaroWinklerTrieFilter implements Runnable {
         return theta;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void run() {
 
@@ -120,7 +121,6 @@ public class JaroWinklerTrieFilter implements Runnable {
 
         boolean first;
         double currentSim;
-        int comps = 0;
         HashMap<String, Double> similarityTable = new HashMap<String, Double>();
 
 
@@ -135,8 +135,6 @@ public class JaroWinklerTrieFilter implements Runnable {
                         currentSim = metric.proximity(b);
                     if (currentSim >= threshold)
                         similarityTable.put(b, currentSim);
-                    if (currentSim > -1.0d)
-                        comps++;
                     first = false;
                 }
                 if (similarityTable.size() > 0) {

@@ -11,12 +11,10 @@ import java.util.concurrent.Executors;
  * Matches one list of strings against the other,
  * using the given JaroWinklerMetric and an optional range filter
  */
-@SuppressWarnings("unchecked")
 
 public class JaroWinklerMatcher {
 
     private double threshold;
-    private long comps;
     private List<String> listA, listB;
     private JaroWinklerMetric metric;
     private int cores;
@@ -111,18 +109,5 @@ public class JaroWinklerMatcher {
         }
         
         return similarityBook;
-    }
-
-    /**
-     *
-     * @return number of executed comparisons
-     */
-    public long getComps () {
-        return this.comps;
-    }
-
-
-    public static void main (String[] args) {
-
     }
 }
