@@ -39,11 +39,7 @@ public class JaroWinklerMatcher {
      */
     public Map<String, Map<String, Double>> match () {
 
-        ConcurrentHashMap<String, Map<String, Double>> similarityBook;
-        //HashMap<String, Map<String, Double>> similarityBook;
-
-        similarityBook = new
-                ConcurrentHashMap<String, Map<String, Double>>(listA.size(), 1.0f);
+        Map<String, Map<String, Double>> similarityBook;
 
         List<String> red, blue;
         red = listA;
@@ -86,22 +82,34 @@ public class JaroWinklerMatcher {
             tempPairs.add(m);
         }
 
-        int threads = Math.min(this.cores, Runtime.getRuntime().availableProcessors());
-
-        //create thread pool, one thread per partition
-        ExecutorService executor = Executors.newFixedThreadPool(threads);
-        for (Pair<List<String>, List<String>> tempPair : tempPairs) {
-            Runnable worker = new JaroWinklerTrieFilter(tempPair, similarityBook, metric.clone(), threshold);
-            executor.execute(worker);
-        }
-        executor.shutdown();
-        while (!executor.isTerminated()) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        if (this.cores > 1) {
+            
+            similarityBook = new ConcurrentHashMap<String, Map<String, Double>>(listA.size(), 1.0f);
+            
+            int threads = Math.min(this.cores, Runtime.getRuntime().availableProcessors());
+            
+            // create thread pool, one thread per partition
+            ExecutorService executor = Executors.newFixedThreadPool(threads);
+            for (Pair<List<String>, List<String>> tempPair : tempPairs) {
+                Runnable worker = new JaroWinklerTrieFilter(tempPair, similarityBook, metric.clone(), threshold);
+                executor.execute(worker);
+            }
+            executor.shutdown();
+            while (!executor.isTerminated()) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            similarityBook = new HashMap<String, Map<String, Double>>(listA.size(), 1.0f);
+            
+            for (Pair<List<String>, List<String>> tempPair : tempPairs) {
+                new JaroWinklerTrieFilter(tempPair, similarityBook, metric.clone(), threshold).run();
             }
         }
+        
         return similarityBook;
     }
 
